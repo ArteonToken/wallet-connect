@@ -11,12 +11,12 @@ const { Web3Provider, JsonRpcProvider } = providers
  * @return { Object } {Web3Provider}
  */
 const providerFor = (rpcUrl, network) => {
+  /* istanbul ignore next */
+  if (!rpcUrl) return new Web3Provider(globalThis.ethereum)
   /* istanbul ignore else */
   if (rpcUrl.includes('infura') || rpcUrl.includes('etherscan')) {
     return new JsonRpcProvider(rpcUrl, network)
   }
-  /* istanbul ignore next */
-  return new Web3Provider(globalThis.ethereum)
 }
 
 /**
@@ -36,25 +36,21 @@ export const metaMask = async (network) => {
     })
   } catch (e) {
     if (e.code === 4902) {
-      try {
-        await globalThis.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            chainName: network.name,
-            chainId: new BigNumber.from(network.chainId)._hex,
-            rpcUrls: [rpcUrlFor(network.chainId)],
-            blockExplorerUrls: [blockExplorerFor(network.chainId)],
-            iconUrls: [iconUrlFor(network.chainName)],
-            nativeCurrency: {
-              name: network.name,
-              symbol: symbolFor(network.chainId),
-              decimals: 18,
-            },
-          }],
-        });
-      } catch (addError) {
-        // handle "add" error
-      }
+      await globalThis.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainName: network.name,
+          chainId: new BigNumber.from(network.chainId)._hex,
+          rpcUrls: [rpcUrlFor(network.chainId)],
+          blockExplorerUrls: [blockExplorerFor(network.chainId)],
+          iconUrls: [iconUrlFor(network.chainName)],
+          nativeCurrency: {
+            name: network.name,
+            symbol: symbolFor(network.chainId),
+            decimals: 18,
+          },
+        }],
+      });
     }
   }
   /* istanbul ignore next */
