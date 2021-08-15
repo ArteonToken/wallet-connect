@@ -1,4 +1,4 @@
-import { networksByName, networksById, networkFromRpc } from './utils'
+import { networksByName, networksById, networkFromRpc, DEFAULT_NETWORK } from './utils'
 import { providers, Wallet, utils } from 'ethers'
 const { HDNode } = utils
 const { Web3Provider, JsonRpcProvider } = providers
@@ -83,9 +83,14 @@ export const hdWallet = (network, params) => {
  */
 /* istanbul ignore next */
 export const connect = async (params = {}, network) => {
-  if (!params.rpcUrl) throw new Error('rpcUrl required');
+  if (typeof params === 'string') network = params
+  if (!isNaN(params)) network = params
+  if (typeof params === 'object') {
+    if (params.name) network.name = params.name
+    if (params.chainId) network.chainId = params.chainId
+  }
 
-  if (!network) network = networkFromRpc(params.rpcUrl)
+  if (!network) network = params.rpcUrl ? networkFromRpc(params.rpcUrl) : DEFAULT_NETWORK
 
   if (typeof network === 'object') {
     if (network.name !== networksById[Number(network.chainId)] ||
