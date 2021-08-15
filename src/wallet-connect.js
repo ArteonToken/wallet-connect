@@ -12,7 +12,7 @@ const { Web3Provider, JsonRpcProvider } = providers
  */
 const providerFor = (rpcUrl, network) => {
   /* istanbul ignore next */
-  if (!rpcUrl) return new Web3Provider(globalThis.ethereum)
+  if (!rpcUrl) return new Web3Provider(globalThis.ethereum, network)
   /* istanbul ignore else */
   if (rpcUrl.includes('infura') || rpcUrl.includes('etherscan')) {
     return new JsonRpcProvider(rpcUrl, network)
@@ -27,6 +27,7 @@ const providerFor = (rpcUrl, network) => {
 /* istanbul ignore next */
 export const metaMask = async (network) => {
   /* istanbul ignore next */
+  const provider = providerFor(undefined, network)
   try {
     await globalThis.ethereum.request({
       method: 'wallet_switchEthereumChain',
@@ -59,7 +60,7 @@ export const metaMask = async (network) => {
   })
   /* istanbul ignore next */
   return {
-    provider: providerFor(),
+    provider,
     accounts,
   }
 }
@@ -103,16 +104,17 @@ export const hdWallet = (network, params) => {
  * @return { Provider } { hdWallet | privateKey | metaMask }
  */
 /* istanbul ignore next */
-export const connect = async (params = {}, network) => {
+export const connect = async (params = {}, network = {}) => {
   if (typeof params === 'string') network = params
   if (!isNaN(params)) network = params
   if (typeof params === 'object') {
-    network = {}
     if (params.name) network.name = params.name
     if (params.chainId) network.chainId = params.chainId
   }
 
-  if (!network) network = params.rpcUrl ? networkFromRpc(params.rpcUrl) : DEFAULT_NETWORK
+  if (Object.keys(network).length === 0) {
+    network = params.rpcUrl ? networkFromRpc(params.rpcUrl) : DEFAULT_NETWORK
+  }
 
   if (typeof network === 'object') {
     if (network.name !== networksById[Number(network.chainId)] ||
