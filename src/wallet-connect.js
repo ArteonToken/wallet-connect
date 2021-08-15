@@ -107,6 +107,7 @@ export const connect = async (params = {}, network) => {
   if (typeof params === 'string') network = params
   if (!isNaN(params)) network = params
   if (typeof params === 'object') {
+    network = {}
     if (params.name) network.name = params.name
     if (params.chainId) network.chainId = params.chainId
   }
