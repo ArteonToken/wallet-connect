@@ -22,4 +22,4 @@ after_failure:
 
 branches:
   only:
-  - master
+  - main
