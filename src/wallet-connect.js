@@ -1,5 +1,6 @@
-import { networksByName, networksById, networkFromRpc, DEFAULT_NETWORK } from './utils'
-import { providers, Wallet, utils } from 'ethers'
+import { networksByName, networksById, networkFromRpc, DEFAULT_NETWORK,
+  rpcUrlFor, blockExplorerFor, symbolFor, iconUrlFor } from './utils'
+import { providers, Wallet, utils, BigNumber } from 'ethers'
 const { HDNode } = utils
 const { Web3Provider, JsonRpcProvider } = providers
 
@@ -26,12 +27,36 @@ const providerFor = (rpcUrl, network) => {
 /* istanbul ignore next */
 export const metaMask = async (network) => {
   /* istanbul ignore next */
-  await globalThis.ethereum.request({
-    method: 'wallet_switchEthereumChain',
-    params: {
-      chainId: network.chainId,
-    },
-  })
+  try {
+    await globalThis.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{
+        chainId: new BigNumber.from(network.chainId)._hex,
+      }],
+    })
+  } catch (e) {
+    if (e.code === 4902) {
+      try {
+        await globalThis.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainName: network.name,
+            chainId: new BigNumber.from(network.chainId)._hex,
+            rpcUrls: [rpcUrlFor(network.chainId)],
+            blockExplorerUrls: [blockExplorerFor(network.chainId)],
+            iconUrls: [iconUrlFor(network.chainName)],
+            nativeCurrency: {
+              name: network.name,
+              symbol: symbolFor(network.chainId),
+              decimals: 18,
+            },
+          }],
+        });
+      } catch (addError) {
+        // handle "add" error
+      }
+    }
+  }
   /* istanbul ignore next */
   const accounts = await globalThis.ethereum.request({
     method: 'eth_requestAccounts',

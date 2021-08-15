@@ -3,7 +3,7 @@ export const networksById = {
   3: 'ropsten',
   5: 'goerli',
   137: 'polygon-mainnet',
-  8001: 'polygon-mumbai',
+  80001: 'polygon-mumbai',
 }
 
 export const networksByName = {
@@ -11,7 +11,7 @@ export const networksByName = {
   'ropsten': 3,
   'goerli': 5,
   'polygon-mainnet': 137,
-  'polygon-mumbai': 8001,
+  'polygon-mumbai': 80001,
 }
 
 export const DEFAULT_NETWORK = {
@@ -19,6 +19,25 @@ export const DEFAULT_NETWORK = {
   chainId: 1,
 }
 
+export const rpcUrlsById = {
+  80001: `https://rpc-mumbai.maticvigil.com/`,
+  137: `https://rpc-mainnet.maticvigil.com/`,
+}
+
+export const symbolsById = {
+  80001: 'tMATIC',
+  137: `MATIC`,
+}
+
+export const explorersById = {
+  80001: 'https://mumbai.polygonscan.com',
+  137: `https://polygonscan.com`,
+}
+
+export const iconUrlsById = {
+  80001: 'https://docs.matic.network/img/matic-logo.svg',
+  137: 'https://docs.matic.network/img/matic-logo.svg',
+}
 /**
  * @param { String } url - rpcUrl
  * @return {Object} network - { name, chainId }
@@ -34,9 +53,18 @@ export const networkFromRpc = (url) => {
   return network
 }
 
-export default {
-  DEFAULT_NETWORK,
-  networkFromRpc,
-  networksById,
-  networksByName,
+export const rpcUrlFor = (chainId) => {
+  return rpcUrlsById(chainId)
+}
+
+export const symbolFor = (chainId) => {
+  return symbolsById(chainId)
+}
+
+export const blockExplorerFor = (chainId) => {
+  return explorersById(chainId)
+}
+
+export const iconUrlFor = (chainId) => {
+  return iconUrlsById(chainId)
 }

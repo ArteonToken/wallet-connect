@@ -54,7 +54,7 @@ test('connects to polygon mumbai', async tape => {
     rpcUrl: mumbaiRpcUrl
   }, {
     name: 'polygon-mumbai',
-    chainId: 8001
+    chainId: 80001
   })
   const signer = await result.provider.getSigner()
 
@@ -68,7 +68,7 @@ test('connects to polygon mumbai (using chainId)', async tape => {
   const result = await connect({
     mnemonic,
     rpcUrl: mumbaiRpcUrl
-  }, 8001)
+  }, 80001)
   const signer = await result.provider.getSigner()
 
   tape.ok(signer._isSigner, 'can sign')
@@ -123,7 +123,7 @@ test('throws when name is invalid', async tape => {
       rpcUrl
     }, {
       name: 'mumbai',
-      chainId: 8001
+      chainId: 80001
     })
   } catch (e) {
     tape.ok(e, e)
