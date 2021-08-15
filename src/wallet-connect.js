@@ -1,4 +1,4 @@
-import { networksByName, networksById, networkFromRpc, DEFAULT_NETWORK } from './utils'
+import { networksByName, networksById, networkFromRpc } from './utils'
 import { providers, Wallet, utils } from 'ethers'
 const { HDNode } = utils
 const { Web3Provider, JsonRpcProvider } = providers
@@ -23,7 +23,7 @@ const providerFor = (rpcUrl, network) => {
  *
  * @return { Promise } { Web3Provider, accounts }
  */
- /* istanbul ignore next */
+/* istanbul ignore next */
 export const metaMask = async (network) => {
   /* istanbul ignore next */
   await globalThis.ethereum.request({
@@ -81,7 +81,7 @@ export const hdWallet = (network, params) => {
  *
  * @return { Provider } { hdWallet | privateKey | metaMask }
  */
- /* istanbul ignore next */
+/* istanbul ignore next */
 export const connect = async (params = {}, network) => {
   if (!params.rpcUrl) throw new Error('rpcUrl required');
 

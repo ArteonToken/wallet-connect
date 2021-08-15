@@ -5,6 +5,8 @@ docs
 .eslintrc.json
 .travis.yml
 nyc.config.js
+.nyc_output
+coverage
 deploy.js
 rollup.config.js
 test.js
