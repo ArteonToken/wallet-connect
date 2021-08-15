@@ -44,7 +44,7 @@ export const metaMask = async (network) => {
           chainId: new BigNumber.from(network.chainId)._hex,
           rpcUrls: [rpcUrlFor(network.chainId)],
           blockExplorerUrls: [blockExplorerFor(network.chainId)],
-          iconUrls: [iconUrlFor(network.chainName)],
+          iconUrls: [iconUrlFor(network.name)],
           nativeCurrency: {
             name: network.name,
             symbol: symbolFor(network.chainId),
@@ -136,7 +136,7 @@ export const connect = async (params = {}, network = {}) => {
   if (params.mnemonic) return hdWallet(network, params)
   if (params.privateKey) return privateKey(network, params)
   /* istanbul ignore next */
-  return metaMask(network.chainId)
+  return metaMask(network)
 }
 
 export default {
