@@ -1,15 +1,40 @@
 {
-  "name": "network-connect",
+  "name": "@arteon/network-connect",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/network-connect.js",
+  "browser": "dist/network-connect.browser.js",
+  "module": "src/network-connect.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "rollup -c",
+    "c": "npm run compile",
+    "watch": "rollup -c -w",
+    "w": "npm run watch",
+    "doc": "./node_modules/.bin/esdoc",
+    "lint": "./node_modules/.bin/eslint src/**/**.js --fix",
+    "coverage": "nyc --reporter=lcov npm run test",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "b": "browserify dist/network-connect.js -o dist/network-connect.browser.js --standalone networkConnect",
+    "build": "npm run lint && npm run c && npm run b && npm run coverage && npm run coveralls",
+    "test": "node test"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vandeurenglenn<vandeurenglenn@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "browserify": "^17.0.0",
+    "coveralls": "^3.1.1",
+    "dotenv": "^10.0.0",
+    "esdoc": "^1.1.0",
+    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
+    "esdoc-standard-plugin": "^1.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0",
+    "nyc": "^15.1.0",
+    "rollup": "^2.56.2",
     "tape": "^5.3.1"
+  },
+  "dependencies": {
+    "ethers": "^5.4.4"
   }
 }

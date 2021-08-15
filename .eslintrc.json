@@ -1,0 +1,33 @@
+{
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "extends": ["eslint:recommended", "google"],
+  "rules": {
+    "semi": 0,
+    "object-curly-spacing": 0,
+    "max-len": ["error", {
+        "code": 100,
+        "ignoreComments": true,
+        "ignoreUrls": true,
+        "ignoreTrailingComments": true
+      }
+    ]
+  },
+  "globals": {
+    "globalThis": true,
+    "accountStore": true,
+    "walletStore": true,
+    "blockStore": true,
+    "pubsub": true,
+    "peerMap": true,
+    "connections": true,
+    "recentConnections": true
+  }
+}

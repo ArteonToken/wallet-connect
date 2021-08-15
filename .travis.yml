@@ -1,0 +1,25 @@
+os:
+  - linux
+  - windows
+  - osx
+
+language: node_js
+node_js:
+- 14
+
+script:
+  - npm run c
+  - npm run doc
+  - npm run test
+
+after_success:
+  - npm run coverage
+  - npm run coveralls
+  - node deploy.js success $WEBHOOK_URL
+
+after_failure:
+  - node deploy.js failure $WEBHOOK_URL
+
+branches:
+  only:
+  - master
