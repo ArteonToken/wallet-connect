@@ -15,7 +15,7 @@
     "coverage": "nyc --reporter=lcov npm run test",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "b": "browserify dist/network-connect.js -o dist/network-connect.browser.js --standalone networkConnect",
-    "build": "npm run lint && npm run c && npm run b && npm run coverage && npm run coveralls",
+    "build": "npm run lint && npm run c && npm run b && npm run coverage && npm run coveralls npm run doc",
     "test": "node test"
   },
   "keywords": [],
