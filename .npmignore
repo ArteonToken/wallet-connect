@@ -1,1 +1,9 @@
 docs
+.gitignore
+.env
+.esdoc.json
+.eslintrc.json
+.travis.yml
+deploy.js
+rollup.config.js
+test.js
