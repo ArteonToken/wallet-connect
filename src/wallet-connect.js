@@ -1,5 +1,7 @@
-import { networksByName, networksById, networkFromRpc, DEFAULT_NETWORK,
-  rpcUrlFor, blockExplorerFor, symbolFor, iconUrlFor } from './utils'
+import {
+  networksByName, networksById, networkFromRpc, DEFAULT_NETWORK,
+  rpcUrlFor, blockExplorerFor, symbolFor, iconUrlFor, chainNameFor,
+} from './utils'
 import { providers, Wallet, utils, BigNumber } from 'ethers'
 const { HDNode } = utils
 const { Web3Provider, JsonRpcProvider } = providers
@@ -40,7 +42,7 @@ export const metaMask = async (network) => {
       await globalThis.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainName: network.name,
+          chainName: chainNameFor(network.chainId),
           chainId: new BigNumber.from(network.chainId)._hex,
           rpcUrls: [rpcUrlFor(network.chainId)],
           blockExplorerUrls: [blockExplorerFor(network.chainId)],

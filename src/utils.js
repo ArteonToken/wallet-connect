@@ -38,6 +38,12 @@ export const iconUrlsById = {
   80001: 'https://docs.matic.network/img/matic-logo.svg',
   137: 'https://docs.matic.network/img/matic-logo.svg',
 }
+
+export const chainNamesById = {
+  80001: 'Matic(Polygon) Testnet Mumbai',
+  137: 'Matic(Polygon) Mainnet',
+}
+
 /**
  * @param { String } url - rpcUrl
  * @return {Object} network - { name, chainId }
@@ -51,6 +57,10 @@ export const networkFromRpc = (url) => {
     }
   }
   return network
+}
+
+export const chainNameFor = (chainId) => {
+  return chainNamesById[chainId]
 }
 
 export const rpcUrlFor = (chainId) => {
