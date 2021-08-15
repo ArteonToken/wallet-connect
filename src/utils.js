@@ -20,8 +20,8 @@ export const DEFAULT_NETWORK = {
 }
 
 export const rpcUrlsById = {
-  80001: `https://rpc-mumbai.maticvigil.com/`,
-  137: `https://rpc-mainnet.maticvigil.com/`,
+  80001: `https://rpc-mumbai.matic.today`,
+  137: `https://rpc-mainnet.matic.network`,
 }
 
 export const symbolsById = {
