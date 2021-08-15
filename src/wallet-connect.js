@@ -20,7 +20,7 @@ const providerFor = (rpcUrl, network) => {
 /**
  * @param { Object } network - { name, chainId}
  *
- * @return { Web3Provider, accounts }
+ * @return { Object } { Web3Provider, accounts }
  */
 export const metaMask = async (network) => {
   await globalThis.ethereum.request({
@@ -42,7 +42,7 @@ export const metaMask = async (network) => {
  * @param { Object } network - { name, chainId}
  * @param { Object } params - { rpcUrl, privateKey}
  *
- * @return { JsonRpcProvider, Wallet, accounts }
+ * @return { Object } { JsonRpcProvider, Wallet, accounts }
  */
 export const privateKey = (network, params) => {
   const provider = providerFor(params.rpcUrl, network)
@@ -58,7 +58,7 @@ export const privateKey = (network, params) => {
  * @param { Object } network - { name, chainId}
  * @param { Object } params - { rpcUrl, mnemonic}
  *
- * @return { JsonRpcProvider, HDNode, accounts }
+ * @return { Object } { JsonRpcProvider, HDNode, accounts }
  */
 export const hdWallet = (network, params) => {
   const provider = providerFor(params.rpcUrl, network)
@@ -73,6 +73,8 @@ export const hdWallet = (network, params) => {
 /**
  * @param {Object} params {rpcUrl, id, password, mnemonic, privateKey}
  * @param {Object | Number | String | undefined} network {name, chainId} | name | chainId
+ *
+ * @return { Provider } { JsonRpcProvider | Web3Provider }
  */
 export const connect = async (params = {}, network) => {
   if (!network) {
