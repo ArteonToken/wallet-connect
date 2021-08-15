@@ -15,10 +15,6 @@ script:
 after_success:
   - npm run coverage
   - npm run coveralls
-  - node deploy.js success $WEBHOOK_URL
-
-after_failure:
-  - node deploy.js failure $WEBHOOK_URL
 
 branches:
   only:
