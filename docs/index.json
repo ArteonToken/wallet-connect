@@ -566,245 +566,8 @@
   {
     "__docId__": 48,
     "kind": "file",
-    "name": "src/network-connect.js",
-    "content": "import { networksByName, networksById, networkFromRpc, DEFAULT_NETWORK } from './utils'\nimport { providers, Wallet, utils } from 'ethers'\nconst { HDNode } = utils\nconst { Web3Provider, JsonRpcProvider } = providers\n\nconst providerFor = (rpcUrl, network) => {\n  if (rpcUrl.includes('infura') || rpcUrl.includes('etherscan')) {\n    return new JsonRpcProvider(rpcUrl, network)\n  }\n\n  return new Web3Provider(globalThis.ethereum)\n}\n\nexport const metaMask = async (network) => {\n  await globalThis.ethereum.request({\n    method: 'wallet_switchEthereumChain',\n    params: {\n      chainId: network.chainId,\n    },\n  })\n  const accounts = await globalThis.ethereum.request({\n    method: 'eth_requestAccounts',\n  })\n  return {\n    provider: providerFor(),\n    accounts,\n  }\n}\n\nexport const privateKey = (network, params) => {\n  const provider = providerFor(params.rpcUrl, network)\n  const wallet = new Wallet(params.privateKey, provider)\n  return {\n    provider,\n    wallet,\n    accounts: [wallet.address],\n  }\n}\n\nexport const hdWallet = (network, params) => {\n  const provider = providerFor(params.rpcUrl, network)\n  const wallet = HDNode.fromMnemonic(params.mnemonic, provider)\n  return {\n    provider,\n    wallet,\n    accounts: [wallet.address],\n  }\n}\n\n/**\n * @param {Object} params {rpcUrl, id, password, mnemonic, privateKey}\n * @param {Object | Number | String} network {name, chainId} | name | chainId\n */\nexport const connect = async (params = {}, network) => {\n  if (!network) {\n    network = params.rpcUrl ? networkFromRpc(params.rpcUrl) : DEFAULT_NETWORK\n  }\n  if (typeof network === 'object') {\n    if (network.name !== networksById[Number(network.chainId)]) {\n      throw console.error('invalid network name')\n    }\n    if (Number(network.chainId) !== Number(networksByName[network.name])) {\n      throw console.error('invalid network chainId')\n    }\n  } else if (!isNaN(network)) {\n    network = {\n      chainId: network,\n      name: networksById(network),\n    }\n  } else {\n    network = {\n      chainId: networksByName[network],\n      name: network,\n    }\n  }\n  if (params.mnemonic) return hdWallet(network, params)\n  if (params.privateKey) return privateKey(network, params)\n  return metaMask(network.chainId)\n}\n\nexport default {\n  connect,\n  providerFor,\n  metaMask,\n  privateKey,\n  hdWallet,\n}\n",
-    "static": true,
-    "longname": "D:/Workspace/Arteon/network-connect/src/network-connect.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 49,
-    "kind": "variable",
-    "name": "HDNode",
-    "memberof": "src/network-connect.js",
-    "static": true,
-    "longname": "src/network-connect.js~HDNode",
-    "access": "public",
-    "export": false,
-    "importPath": "@arteon/network-connect/src/network-connect.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 3,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    },
-    "ignore": true
-  },
-  {
-    "__docId__": 50,
-    "kind": "variable",
-    "name": "Web3Provider",
-    "memberof": "src/network-connect.js",
-    "static": true,
-    "longname": "src/network-connect.js~Web3Provider",
-    "access": "public",
-    "export": false,
-    "importPath": "@arteon/network-connect/src/network-connect.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 4,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    },
-    "ignore": true
-  },
-  {
-    "__docId__": 51,
-    "kind": "function",
-    "name": "providerFor",
-    "memberof": "src/network-connect.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/network-connect.js~providerFor",
-    "access": "public",
-    "export": false,
-    "importPath": "@arteon/network-connect/src/network-connect.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
-    "params": [
-      {
-        "name": "rpcUrl",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "network",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": {
-      "types": [
-        "*"
-      ]
-    },
-    "ignore": true
-  },
-  {
-    "__docId__": 52,
-    "kind": "function",
-    "name": "metaMask",
-    "memberof": "src/network-connect.js",
-    "generator": false,
-    "async": true,
-    "static": true,
-    "longname": "src/network-connect.js~metaMask",
-    "access": "public",
-    "export": true,
-    "importPath": "@arteon/network-connect/src/network-connect.js",
-    "importStyle": "{metaMask}",
-    "description": null,
-    "lineNumber": 14,
-    "undocument": true,
-    "params": [
-      {
-        "name": "network",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": {
-      "types": [
-        "{\"provider\": *, \"accounts\": *}"
-      ]
-    }
-  },
-  {
-    "__docId__": 53,
-    "kind": "function",
-    "name": "privateKey",
-    "memberof": "src/network-connect.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/network-connect.js~privateKey",
-    "access": "public",
-    "export": true,
-    "importPath": "@arteon/network-connect/src/network-connect.js",
-    "importStyle": "{privateKey}",
-    "description": null,
-    "lineNumber": 30,
-    "undocument": true,
-    "params": [
-      {
-        "name": "network",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "params",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": {
-      "types": [
-        "{\"provider\": *, \"wallet\": *, \"accounts\": *}"
-      ]
-    }
-  },
-  {
-    "__docId__": 54,
-    "kind": "function",
-    "name": "hdWallet",
-    "memberof": "src/network-connect.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/network-connect.js~hdWallet",
-    "access": "public",
-    "export": true,
-    "importPath": "@arteon/network-connect/src/network-connect.js",
-    "importStyle": "{hdWallet}",
-    "description": null,
-    "lineNumber": 40,
-    "undocument": true,
-    "params": [
-      {
-        "name": "network",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "params",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": {
-      "types": [
-        "{\"provider\": *, \"wallet\": *, \"accounts\": *}"
-      ]
-    }
-  },
-  {
-    "__docId__": 55,
-    "kind": "function",
-    "name": "connect",
-    "memberof": "src/network-connect.js",
-    "generator": false,
-    "async": true,
-    "static": true,
-    "longname": "src/network-connect.js~connect",
-    "access": "public",
-    "export": true,
-    "importPath": "@arteon/network-connect/src/network-connect.js",
-    "importStyle": "{connect}",
-    "description": "",
-    "lineNumber": 54,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "Object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "params",
-        "description": "{rpcUrl, id, password, mnemonic, privateKey}"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "Object ",
-          " Number ",
-          " String"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "network",
-        "description": "{name, chainId} | name | chainId"
-      }
-    ],
-    "return": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 56,
-    "kind": "file",
     "name": "src/utils.js",
-    "content": "export const networksById = {\n  1: 'mainnet',\n  3: 'ropsten',\n  5: 'goerli',\n  137: 'polygon-mainnet',\n  8001: 'polygon-mumbai',\n}\n\nexport const networksByName = {\n  'mainnet': 1,\n  'ropsten': 3,\n  'goerli': 5,\n  'polygon-mainnet': 137,\n  'polygon-mumbai': 8001,\n}\n\nexport const DEFAULT_NETWORK = {\n  name: 'mainnet',\n  chainId: 1,\n}\n\nexport const networkFromRpc = (url) => {\n  const network = DEFAULT_NETWORK\n  for (const name of Object.keys(networksByName)) {\n    if (url.includes(name)) {\n      network.name = name\n      network.chainId = networksByName[name]\n    }\n  }\n  return network\n}\n\nexport default {\n  DEFAULT_NETWORK,\n  networkFromRpc,\n  networksById,\n  networksByName,\n}\n",
+    "content": "export const networksById = {\n  1: 'mainnet',\n  3: 'ropsten',\n  5: 'goerli',\n  137: 'polygon-mainnet',\n  8001: 'polygon-mumbai',\n}\n\nexport const networksByName = {\n  'mainnet': 1,\n  'ropsten': 3,\n  'goerli': 5,\n  'polygon-mainnet': 137,\n  'polygon-mumbai': 8001,\n}\n\nexport const DEFAULT_NETWORK = {\n  name: 'mainnet',\n  chainId: 1,\n}\n\n/**\n * @param { String } url - rpcUrl\n * @return {Object} network - { name, chainId }\n */\nexport const networkFromRpc = (url) => {\n  const network = DEFAULT_NETWORK\n  for (const name of Object.keys(networksByName)) {\n    if (url.includes(name)) {\n      network.name = name\n      network.chainId = networksByName[name]\n    }\n  }\n  return network\n}\n\nexport default {\n  DEFAULT_NETWORK,\n  networkFromRpc,\n  networksById,\n  networksByName,\n}\n",
     "static": true,
     "longname": "D:/Workspace/Arteon/network-connect/src/utils.js",
     "access": "public",
@@ -812,7 +575,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 57,
+    "__docId__": 49,
     "kind": "variable",
     "name": "networksById",
     "memberof": "src/utils.js",
@@ -820,7 +583,7 @@
     "longname": "src/utils.js~networksById",
     "access": "public",
     "export": true,
-    "importPath": "@arteon/network-connect/src/utils.js",
+    "importPath": "@arteon/wallet-connect/src/utils.js",
     "importStyle": "{networksById}",
     "description": null,
     "lineNumber": 1,
@@ -832,7 +595,7 @@
     }
   },
   {
-    "__docId__": 58,
+    "__docId__": 50,
     "kind": "variable",
     "name": "networksByName",
     "memberof": "src/utils.js",
@@ -840,7 +603,7 @@
     "longname": "src/utils.js~networksByName",
     "access": "public",
     "export": true,
-    "importPath": "@arteon/network-connect/src/utils.js",
+    "importPath": "@arteon/wallet-connect/src/utils.js",
     "importStyle": "{networksByName}",
     "description": null,
     "lineNumber": 9,
@@ -852,7 +615,7 @@
     }
   },
   {
-    "__docId__": 59,
+    "__docId__": 51,
     "kind": "variable",
     "name": "DEFAULT_NETWORK",
     "memberof": "src/utils.js",
@@ -860,7 +623,7 @@
     "longname": "src/utils.js~DEFAULT_NETWORK",
     "access": "public",
     "export": true,
-    "importPath": "@arteon/network-connect/src/utils.js",
+    "importPath": "@arteon/wallet-connect/src/utils.js",
     "importStyle": "{DEFAULT_NETWORK}",
     "description": null,
     "lineNumber": 17,
@@ -872,7 +635,7 @@
     }
   },
   {
-    "__docId__": 60,
+    "__docId__": 52,
     "kind": "function",
     "name": "networkFromRpc",
     "memberof": "src/utils.js",
@@ -882,10 +645,10 @@
     "longname": "src/utils.js~networkFromRpc",
     "access": "public",
     "export": true,
-    "importPath": "@arteon/network-connect/src/utils.js",
+    "importPath": "@arteon/wallet-connect/src/utils.js",
     "importStyle": "{networkFromRpc}",
     "description": null,
-    "lineNumber": 22,
+    "lineNumber": 26,
     "undocument": true,
     "params": [
       {
@@ -902,8 +665,283 @@
     }
   },
   {
+    "__docId__": 53,
+    "kind": "file",
+    "name": "src/wallet-connect.js",
+    "content": "import { networksByName, networksById, networkFromRpc, DEFAULT_NETWORK } from './utils'\nimport { providers, Wallet, utils } from 'ethers'\nconst { HDNode } = utils\nconst { Web3Provider, JsonRpcProvider } = providers\n\n/**\n * @param { String | undefined } rpcUrl - when undefined metaMask is returned\n * @param { Object } network - { name, chainId}\n *\n */\nconst providerFor = (rpcUrl, network) => {\n  if (rpcUrl.includes('infura') || rpcUrl.includes('etherscan')) {\n    return new JsonRpcProvider(rpcUrl, network)\n  }\n\n  /**\n   * @return { Web3Provider }\n   */\n  return new Web3Provider(globalThis.ethereum)\n}\n\n/**\n * @param { Object } network - { name, chainId}\n *\n * @return { Object } { Web3Provider, accounts }\n */\nexport const metaMask = async (network) => {\n  await globalThis.ethereum.request({\n    method: 'wallet_switchEthereumChain',\n    params: {\n      chainId: network.chainId,\n    },\n  })\n  const accounts = await globalThis.ethereum.request({\n    method: 'eth_requestAccounts',\n  })\n  return {\n    provider: providerFor(),\n    accounts,\n  }\n}\n\n/**\n * @param { Object } network - { name, chainId}\n * @param { Object } params - { rpcUrl, privateKey}\n *\n * @return { Object } { JsonRpcProvider, Wallet, accounts }\n */\nexport const privateKey = (network, params) => {\n  const provider = providerFor(params.rpcUrl, network)\n  const wallet = new Wallet(params.privateKey, provider)\n  return {\n    provider,\n    wallet,\n    accounts: [wallet.address],\n  }\n}\n\n/**\n * @param { Object } network - { name, chainId}\n * @param { Object } params - { rpcUrl, mnemonic}\n *\n * @return { Object } { JsonRpcProvider, HDNode, accounts }\n */\nexport const hdWallet = (network, params) => {\n  const provider = providerFor(params.rpcUrl, network)\n  const wallet = HDNode.fromMnemonic(params.mnemonic, provider)\n  return {\n    provider,\n    wallet,\n    accounts: [wallet.address],\n  }\n}\n\n/**\n * @param {Object} params - {rpcUrl, id, password, mnemonic, privateKey}\n * @param {Object | Number | String | undefined} network - {name, chainId} | name | chainId\n *\n * @return { Provider } { hdWallet | privateKey | metaMask }\n */\nexport const connect = async (params = {}, network) => {\n  if (!network) {\n    network = params.rpcUrl ? networkFromRpc(params.rpcUrl) : DEFAULT_NETWORK\n  }\n  if (typeof network === 'object') {\n    if (network.name !== networksById[Number(network.chainId)]) {\n      throw console.error('invalid network name')\n    }\n    if (Number(network.chainId) !== Number(networksByName[network.name])) {\n      throw console.error('invalid network chainId')\n    }\n  } else if (!isNaN(network)) {\n    network = {\n      chainId: network,\n      name: networksById(network),\n    }\n  } else {\n    network = {\n      chainId: networksByName[network],\n      name: network,\n    }\n  }\n  if (params.mnemonic) return hdWallet(network, params)\n  if (params.privateKey) return privateKey(network, params)\n  return metaMask(network.chainId)\n}\n\nexport default {\n  connect,\n  providerFor,\n  metaMask,\n  privateKey,\n  hdWallet,\n}\n",
+    "static": true,
+    "longname": "D:/Workspace/Arteon/network-connect/src/wallet-connect.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 54,
+    "kind": "variable",
+    "name": "HDNode",
+    "memberof": "src/wallet-connect.js",
+    "static": true,
+    "longname": "src/wallet-connect.js~HDNode",
+    "access": "public",
+    "export": false,
+    "importPath": "@arteon/wallet-connect/src/wallet-connect.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 55,
+    "kind": "variable",
+    "name": "Web3Provider",
+    "memberof": "src/wallet-connect.js",
+    "static": true,
+    "longname": "src/wallet-connect.js~Web3Provider",
+    "access": "public",
+    "export": false,
+    "importPath": "@arteon/wallet-connect/src/wallet-connect.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 56,
+    "kind": "function",
+    "name": "providerFor",
+    "memberof": "src/wallet-connect.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/wallet-connect.js~providerFor",
+    "access": "public",
+    "export": false,
+    "importPath": "@arteon/wallet-connect/src/wallet-connect.js",
+    "importStyle": null,
+    "description": "",
+    "lineNumber": 11,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          " String ",
+          " undefined "
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "rpcUrl",
+        "description": "when undefined metaMask is returned"
+      },
+      {
+        "nullable": null,
+        "types": [
+          " Object "
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "network",
+        "description": "{ name, chainId}"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 57,
+    "kind": "function",
+    "name": "metaMask",
+    "memberof": "src/wallet-connect.js",
+    "generator": false,
+    "async": true,
+    "static": true,
+    "longname": "src/wallet-connect.js~metaMask",
+    "access": "public",
+    "export": true,
+    "importPath": "@arteon/wallet-connect/src/wallet-connect.js",
+    "importStyle": "{metaMask}",
+    "description": "",
+    "lineNumber": 27,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          " Object "
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "network",
+        "description": "{ name, chainId}"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        " Object "
+      ],
+      "spread": false,
+      "description": "{ Web3Provider, accounts }"
+    }
+  },
+  {
+    "__docId__": 58,
+    "kind": "function",
+    "name": "privateKey",
+    "memberof": "src/wallet-connect.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/wallet-connect.js~privateKey",
+    "access": "public",
+    "export": true,
+    "importPath": "@arteon/wallet-connect/src/wallet-connect.js",
+    "importStyle": "{privateKey}",
+    "description": "",
+    "lineNumber": 49,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          " Object "
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "network",
+        "description": "{ name, chainId}"
+      },
+      {
+        "nullable": null,
+        "types": [
+          " Object "
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params",
+        "description": "{ rpcUrl, privateKey}"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        " Object "
+      ],
+      "spread": false,
+      "description": "{ JsonRpcProvider, Wallet, accounts }"
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "function",
+    "name": "hdWallet",
+    "memberof": "src/wallet-connect.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/wallet-connect.js~hdWallet",
+    "access": "public",
+    "export": true,
+    "importPath": "@arteon/wallet-connect/src/wallet-connect.js",
+    "importStyle": "{hdWallet}",
+    "description": "",
+    "lineNumber": 65,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          " Object "
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "network",
+        "description": "{ name, chainId}"
+      },
+      {
+        "nullable": null,
+        "types": [
+          " Object "
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params",
+        "description": "{ rpcUrl, mnemonic}"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        " Object "
+      ],
+      "spread": false,
+      "description": "{ JsonRpcProvider, HDNode, accounts }"
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "function",
+    "name": "connect",
+    "memberof": "src/wallet-connect.js",
+    "generator": false,
+    "async": true,
+    "static": true,
+    "longname": "src/wallet-connect.js~connect",
+    "access": "public",
+    "export": true,
+    "importPath": "@arteon/wallet-connect/src/wallet-connect.js",
+    "importStyle": "{connect}",
+    "description": "",
+    "lineNumber": 81,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params",
+        "description": "{rpcUrl, id, password, mnemonic, privateKey}"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object ",
+          " Number ",
+          " String ",
+          " undefined"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "network",
+        "description": "{name, chainId} | name | chainId"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        " Provider "
+      ],
+      "spread": false,
+      "description": "{ hdWallet | privateKey | metaMask }"
+    }
+  },
+  {
     "kind": "index",
-    "content": "# network-connect\n \n",
+    "content": "# @arteon/wallet-connect\n\n[![Coverage](https://coveralls.io/repos/github/ArteonToken/wallet-connect/badge.svg?branch=main)](https://coveralls.io/github/ArteonToken/wallet-connect?branch=main)\n[![Build Status](https://travis-ci.com/ArteonToken/wallet-connect.svg?branch=main)](https://travis-ci.com/github/ArteonToken/wallet-connect)\n[![](https://david-dm.org/ArteonToken/wallet-connect.svg?style=flat-square)](https://david-dm.org/ArteonToken/wallet-connect)\n[![](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)\n![](https://img.shields.io/badge/npm-%3E%3D6.0.0-orange.svg?style=flat-square)\n![](https://img.shields.io/badge/Node.js-%3E%3D14.0.0-orange.svg?style=flat-square)\n",
     "longname": "D:\\Workspace\\Arteon\\network-connect\\README.md",
     "name": "./README.md",
     "static": true,
@@ -911,7 +949,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n  \"name\": \"@arteon/network-connect\",\n  \"version\": \"1.0.0\",\n  \"description\": \"\",\n  \"main\": \"dist/network-connect.js\",\n  \"browser\": \"dist/network-connect.browser.js\",\n  \"module\": \"src/network-connect.js\",\n  \"scripts\": {\n    \"compile\": \"rollup -c\",\n    \"c\": \"npm run compile\",\n    \"watch\": \"rollup -c -w\",\n    \"w\": \"npm run watch\",\n    \"doc\": \"./node_modules/.bin/esdoc\",\n    \"lint\": \"./node_modules/.bin/eslint src/**/**.js --fix\",\n    \"coverage\": \"nyc --reporter=lcov npm run test\",\n    \"coveralls\": \"cat ./coverage/lcov.info | coveralls\",\n    \"b\": \"browserify dist/network-connect.js -o dist/network-connect.browser.js --standalone networkConnect\",\n    \"build\": \"npm run lint && npm run c && npm run b && npm run coverage && npm run coveralls\",\n    \"test\": \"node test\"\n  },\n  \"keywords\": [],\n  \"author\": \"Vandeurenglenn<vandeurenglenn@gmail.com>\",\n  \"license\": \"MIT\",\n  \"devDependencies\": {\n    \"browserify\": \"^17.0.0\",\n    \"coveralls\": \"^3.1.1\",\n    \"dotenv\": \"^10.0.0\",\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-ecmascript-proposal-plugin\": \"^1.0.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^7.32.0\",\n    \"eslint-config-google\": \"^0.14.0\",\n    \"nyc\": \"^15.1.0\",\n    \"rollup\": \"^2.56.2\",\n    \"tape\": \"^5.3.1\"\n  },\n  \"dependencies\": {\n    \"ethers\": \"^5.4.4\"\n  }\n}\n",
+    "content": "{\n  \"name\": \"@arteon/wallet-connect\",\n  \"version\": \"1.0.0\",\n  \"description\": \"\",\n  \"main\": \"dist/wallet-connect.js\",\n  \"browser\": \"dist/wallet-connect.browser.js\",\n  \"module\": \"src/wallet-connect.js\",\n  \"scripts\": {\n    \"compile\": \"rollup -c\",\n    \"c\": \"npm run compile\",\n    \"watch\": \"rollup -c -w\",\n    \"w\": \"npm run watch\",\n    \"doc\": \"./node_modules/.bin/esdoc\",\n    \"lint\": \"./node_modules/.bin/eslint src/**/**.js --fix\",\n    \"coverage\": \"nyc --reporter=lcov npm run test\",\n    \"coveralls\": \"cat ./coverage/lcov.info | coveralls\",\n    \"b\": \"browserify dist/wallet-connect.js -o dist/wallet-connect.browser.js --standalone walletConnect\",\n    \"build\": \"npm run lint && npm run c && npm run b && npm run coverage && npm run coveralls npm run doc\",\n    \"test\": \"node test\"\n  },\n  \"keywords\": [],\n  \"author\": \"Vandeurenglenn<vandeurenglenn@gmail.com>\",\n  \"repository\": \"https://github.com/Artontoken/wallet-connect\",\n  \"license\": \"MIT\",\n  \"devDependencies\": {\n    \"browserify\": \"^17.0.0\",\n    \"coveralls\": \"^3.1.1\",\n    \"dotenv\": \"^10.0.0\",\n    \"esdoc\": \"^1.1.0\",\n    \"esdoc-ecmascript-proposal-plugin\": \"^1.0.0\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^7.32.0\",\n    \"eslint-config-google\": \"^0.14.0\",\n    \"nyc\": \"^15.1.0\",\n    \"rollup\": \"^2.56.2\",\n    \"tape\": \"^5.3.1\"\n  },\n  \"dependencies\": {\n    \"ethers\": \"^5.4.4\"\n  }\n}\n",
     "longname": "D:\\Workspace\\Arteon\\network-connect\\package.json",
     "name": "package.json",
     "static": true,

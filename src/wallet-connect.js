@@ -7,31 +7,36 @@ const { Web3Provider, JsonRpcProvider } = providers
  * @param { String | undefined } rpcUrl - when undefined metaMask is returned
  * @param { Object } network - { name, chainId}
  *
- * @return { Web3Provider }
+ * @return { Object } {Web3Provider}
  */
 const providerFor = (rpcUrl, network) => {
+  /* istanbul ignore else */
   if (rpcUrl.includes('infura') || rpcUrl.includes('etherscan')) {
     return new JsonRpcProvider(rpcUrl, network)
   }
-
+  /* istanbul ignore next */
   return new Web3Provider(globalThis.ethereum)
 }
 
 /**
  * @param { Object } network - { name, chainId}
  *
- * @return { Object } { Web3Provider, accounts }
+ * @return { Promise } { Web3Provider, accounts }
  */
+ /* istanbul ignore next */
 export const metaMask = async (network) => {
+  /* istanbul ignore next */
   await globalThis.ethereum.request({
     method: 'wallet_switchEthereumChain',
     params: {
       chainId: network.chainId,
     },
   })
+  /* istanbul ignore next */
   const accounts = await globalThis.ethereum.request({
     method: 'eth_requestAccounts',
   })
+  /* istanbul ignore next */
   return {
     provider: providerFor(),
     accounts,
@@ -71,26 +76,26 @@ export const hdWallet = (network, params) => {
 }
 
 /**
- * @param {Object} params {rpcUrl, id, password, mnemonic, privateKey}
- * @param {Object | Number | String | undefined} network {name, chainId} | name | chainId
+ * @param {Object} params - {rpcUrl, id, password, mnemonic, privateKey}
+ * @param {Object | Number | String | undefined} network - {name, chainId} | name | chainId
  *
- * @return { Provider } { JsonRpcProvider | Web3Provider }
+ * @return { Provider } { hdWallet | privateKey | metaMask }
  */
+ /* istanbul ignore next */
 export const connect = async (params = {}, network) => {
-  if (!network) {
-    network = params.rpcUrl ? networkFromRpc(params.rpcUrl) : DEFAULT_NETWORK
-  }
+  if (!params.rpcUrl) throw new Error('rpcUrl required');
+
+  if (!network) network = networkFromRpc(params.rpcUrl)
+
   if (typeof network === 'object') {
-    if (network.name !== networksById[Number(network.chainId)]) {
-      throw console.error('invalid network name')
-    }
-    if (Number(network.chainId) !== Number(networksByName[network.name])) {
-      throw console.error('invalid network chainId')
+    if (network.name !== networksById[Number(network.chainId)] ||
+        Number(network.chainId) !== Number(networksByName[network.name])) {
+      throw new Error('invalid network name/chainId')
     }
   } else if (!isNaN(network)) {
     network = {
       chainId: network,
-      name: networksById(network),
+      name: networksById[network],
     }
   } else {
     network = {
@@ -98,8 +103,10 @@ export const connect = async (params = {}, network) => {
       name: network,
     }
   }
+  /* istanbul ignore next */
   if (params.mnemonic) return hdWallet(network, params)
   if (params.privateKey) return privateKey(network, params)
+  /* istanbul ignore next */
   return metaMask(network.chainId)
 }
 

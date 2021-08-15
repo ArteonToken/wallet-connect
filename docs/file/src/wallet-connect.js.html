@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/wallet-connect.js | @arteon/wallet-connect</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/Artontoken/wallet-connect"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-networkFromRpc">networkFromRpc</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-connect">connect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hdWallet">hdWallet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-metaMask">metaMask</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-privateKey">privateKey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DEFAULT_NETWORK">DEFAULT_NETWORK</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-networksById">networksById</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-networksByName">networksByName</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/wallet-connect.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { networksByName, networksById, networkFromRpc, DEFAULT_NETWORK } from &apos;./utils&apos;
+import { providers, Wallet, utils } from &apos;ethers&apos;
+const { HDNode } = utils
+const { Web3Provider, JsonRpcProvider } = providers
+
+/**
+ * @param { String | undefined } rpcUrl - when undefined metaMask is returned
+ * @param { Object } network - { name, chainId}
+ *
+ */
+const providerFor = (rpcUrl, network) =&gt; {
+  if (rpcUrl.includes(&apos;infura&apos;) || rpcUrl.includes(&apos;etherscan&apos;)) {
+    return new JsonRpcProvider(rpcUrl, network)
+  }
+
+  /**
+   * @return { Web3Provider }
+   */
+  return new Web3Provider(globalThis.ethereum)
+}
+
+/**
+ * @param { Object } network - { name, chainId}
+ *
+ * @return { Object } { Web3Provider, accounts }
+ */
+export const metaMask = async (network) =&gt; {
+  await globalThis.ethereum.request({
+    method: &apos;wallet_switchEthereumChain&apos;,
+    params: {
+      chainId: network.chainId,
+    },
+  })
+  const accounts = await globalThis.ethereum.request({
+    method: &apos;eth_requestAccounts&apos;,
+  })
+  return {
+    provider: providerFor(),
+    accounts,
+  }
+}
+
+/**
+ * @param { Object } network - { name, chainId}
+ * @param { Object } params - { rpcUrl, privateKey}
+ *
+ * @return { Object } { JsonRpcProvider, Wallet, accounts }
+ */
+export const privateKey = (network, params) =&gt; {
+  const provider = providerFor(params.rpcUrl, network)
+  const wallet = new Wallet(params.privateKey, provider)
+  return {
+    provider,
+    wallet,
+    accounts: [wallet.address],
+  }
+}
+
+/**
+ * @param { Object } network - { name, chainId}
+ * @param { Object } params - { rpcUrl, mnemonic}
+ *
+ * @return { Object } { JsonRpcProvider, HDNode, accounts }
+ */
+export const hdWallet = (network, params) =&gt; {
+  const provider = providerFor(params.rpcUrl, network)
+  const wallet = HDNode.fromMnemonic(params.mnemonic, provider)
+  return {
+    provider,
+    wallet,
+    accounts: [wallet.address],
+  }
+}
+
+/**
+ * @param {Object} params - {rpcUrl, id, password, mnemonic, privateKey}
+ * @param {Object | Number | String | undefined} network - {name, chainId} | name | chainId
+ *
+ * @return { Provider } { hdWallet | privateKey | metaMask }
+ */
+export const connect = async (params = {}, network) =&gt; {
+  if (!network) {
+    network = params.rpcUrl ? networkFromRpc(params.rpcUrl) : DEFAULT_NETWORK
+  }
+  if (typeof network === &apos;object&apos;) {
+    if (network.name !== networksById[Number(network.chainId)]) {
+      throw console.error(&apos;invalid network name&apos;)
+    }
+    if (Number(network.chainId) !== Number(networksByName[network.name])) {
+      throw console.error(&apos;invalid network chainId&apos;)
+    }
+  } else if (!isNaN(network)) {
+    network = {
+      chainId: network,
+      name: networksById(network),
+    }
+  } else {
+    network = {
+      chainId: networksByName[network],
+      name: network,
+    }
+  }
+  if (params.mnemonic) return hdWallet(network, params)
+  if (params.privateKey) return privateKey(network, params)
+  return metaMask(network.chainId)
+}
+
+export default {
+  connect,
+  providerFor,
+  metaMask,
+  privateKey,
+  hdWallet,
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

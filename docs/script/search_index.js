@@ -1,50 +1,50 @@
 window.esdocSearchIndex = [
   [
-    "@arteon/network-connect/src/utils.js~default_network",
+    "@arteon/wallet-connect/src/utils.js~default_network",
     "variable/index.html#static-variable-DEFAULT_NETWORK",
-    "<span>DEFAULT_NETWORK</span> <span class=\"search-result-import-path\">@arteon/network-connect/src/utils.js</span>",
+    "<span>DEFAULT_NETWORK</span> <span class=\"search-result-import-path\">@arteon/wallet-connect/src/utils.js</span>",
     "variable"
   ],
   [
-    "@arteon/network-connect/src/network-connect.js~connect",
+    "@arteon/wallet-connect/src/wallet-connect.js~connect",
     "function/index.html#static-function-connect",
-    "<span>connect</span> <span class=\"search-result-import-path\">@arteon/network-connect/src/network-connect.js</span>",
+    "<span>connect</span> <span class=\"search-result-import-path\">@arteon/wallet-connect/src/wallet-connect.js</span>",
     "function"
   ],
   [
-    "@arteon/network-connect/src/network-connect.js~hdwallet",
+    "@arteon/wallet-connect/src/wallet-connect.js~hdwallet",
     "function/index.html#static-function-hdWallet",
-    "<span>hdWallet</span> <span class=\"search-result-import-path\">@arteon/network-connect/src/network-connect.js</span>",
+    "<span>hdWallet</span> <span class=\"search-result-import-path\">@arteon/wallet-connect/src/wallet-connect.js</span>",
     "function"
   ],
   [
-    "@arteon/network-connect/src/network-connect.js~metamask",
+    "@arteon/wallet-connect/src/wallet-connect.js~metamask",
     "function/index.html#static-function-metaMask",
-    "<span>metaMask</span> <span class=\"search-result-import-path\">@arteon/network-connect/src/network-connect.js</span>",
+    "<span>metaMask</span> <span class=\"search-result-import-path\">@arteon/wallet-connect/src/wallet-connect.js</span>",
     "function"
   ],
   [
-    "@arteon/network-connect/src/utils.js~networkfromrpc",
+    "@arteon/wallet-connect/src/utils.js~networkfromrpc",
     "function/index.html#static-function-networkFromRpc",
-    "<span>networkFromRpc</span> <span class=\"search-result-import-path\">@arteon/network-connect/src/utils.js</span>",
+    "<span>networkFromRpc</span> <span class=\"search-result-import-path\">@arteon/wallet-connect/src/utils.js</span>",
     "function"
   ],
   [
-    "@arteon/network-connect/src/utils.js~networksbyid",
+    "@arteon/wallet-connect/src/utils.js~networksbyid",
     "variable/index.html#static-variable-networksById",
-    "<span>networksById</span> <span class=\"search-result-import-path\">@arteon/network-connect/src/utils.js</span>",
+    "<span>networksById</span> <span class=\"search-result-import-path\">@arteon/wallet-connect/src/utils.js</span>",
     "variable"
   ],
   [
-    "@arteon/network-connect/src/utils.js~networksbyname",
+    "@arteon/wallet-connect/src/utils.js~networksbyname",
     "variable/index.html#static-variable-networksByName",
-    "<span>networksByName</span> <span class=\"search-result-import-path\">@arteon/network-connect/src/utils.js</span>",
+    "<span>networksByName</span> <span class=\"search-result-import-path\">@arteon/wallet-connect/src/utils.js</span>",
     "variable"
   ],
   [
-    "@arteon/network-connect/src/network-connect.js~privatekey",
+    "@arteon/wallet-connect/src/wallet-connect.js~privatekey",
     "function/index.html#static-function-privateKey",
-    "<span>privateKey</span> <span class=\"search-result-import-path\">@arteon/network-connect/src/network-connect.js</span>",
+    "<span>privateKey</span> <span class=\"search-result-import-path\">@arteon/wallet-connect/src/wallet-connect.js</span>",
     "function"
   ],
   [
@@ -330,15 +330,15 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
-    "src/network-connect.js",
-    "file/src/network-connect.js.html",
-    "src/network-connect.js",
-    "file"
-  ],
-  [
     "src/utils.js",
     "file/src/utils.js.html",
     "src/utils.js",
+    "file"
+  ],
+  [
+    "src/wallet-connect.js",
+    "file/src/wallet-connect.js.html",
+    "src/wallet-connect.js",
     "file"
   ]
 ]

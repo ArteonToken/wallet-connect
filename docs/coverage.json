@@ -1,20 +1,8 @@
 {
-  "coverage": "9.09%",
+  "coverage": "45.45%",
   "expectCount": 11,
-  "actualCount": 1,
+  "actualCount": 5,
   "files": {
-    "src/network-connect.js": {
-      "expectCount": 7,
-      "actualCount": 1,
-      "undocumentLines": [
-        3,
-        4,
-        6,
-        14,
-        30,
-        40
-      ]
-    },
     "src/utils.js": {
       "expectCount": 4,
       "actualCount": 0,
@@ -22,7 +10,15 @@
         1,
         9,
         17,
-        22
+        26
+      ]
+    },
+    "src/wallet-connect.js": {
+      "expectCount": 7,
+      "actualCount": 5,
+      "undocumentLines": [
+        3,
+        4
       ]
     }
   }

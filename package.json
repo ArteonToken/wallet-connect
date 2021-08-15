@@ -12,7 +12,7 @@
     "w": "npm run watch",
     "doc": "./node_modules/.bin/esdoc",
     "lint": "./node_modules/.bin/eslint src/**/**.js --fix",
-    "coverage": "nyc --reporter=lcov npm run test src/wallet-connect.js",
+    "coverage": "nyc --reporter=lcov npm run test",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "b": "browserify dist/wallet-connect.js -o dist/wallet-connect.browser.js --standalone walletConnect",
     "build": "npm run lint && npm run c && npm run b && npm run coverage && npm run coveralls npm run doc",
