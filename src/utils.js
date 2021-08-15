@@ -54,17 +54,17 @@ export const networkFromRpc = (url) => {
 }
 
 export const rpcUrlFor = (chainId) => {
-  return rpcUrlsById(chainId)
+  return rpcUrlsById[chainId]
 }
 
 export const symbolFor = (chainId) => {
-  return symbolsById(chainId)
+  return symbolsById[chainId]
 }
 
 export const blockExplorerFor = (chainId) => {
-  return explorersById(chainId)
+  return explorersById[chainId]
 }
 
 export const iconUrlFor = (chainId) => {
-  return iconUrlsById(chainId)
+  return iconUrlsById[chainId]
 }
