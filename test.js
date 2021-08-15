@@ -1,8 +1,10 @@
 const test = require('tape')
-const env = require('dotenv')
 const {connect} = require('./dist/network-connect.js')
 
-const {rpcUrl, mumbaiRpcUrl, mnemonic, privateKey} = env.config().parsed
+const rpcUrl = 'https://goerli.infura.io/v3/d7acc44d359646f59bf02a00930a15e6'
+const mumbaiRpcUrl = 'https://polygon-mumbai.infura.io/v3/d7acc44d359646f59bf02a00930a15e6'
+const privateKey = '0x0000000000000000000000000000000000000000000000000000000000000005'
+const mnemonic = 'athlete cross jealous setup cook average voyage gift prepare gown sick cabin'
 
 test('connects to privateKeyWallet', async tape => {
   tape.plan(3)
