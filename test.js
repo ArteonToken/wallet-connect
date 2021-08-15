@@ -1,5 +1,5 @@
 const test = require('tape')
-const {connect} = require('./dist/network-connect.js')
+const {connect} = require('./dist/wallet-connect.js')
 
 const rpcUrl = 'https://goerli.infura.io/v3/d7acc44d359646f59bf02a00930a15e6'
 const mumbaiRpcUrl = 'https://polygon-mumbai.infura.io/v3/d7acc44d359646f59bf02a00930a15e6'

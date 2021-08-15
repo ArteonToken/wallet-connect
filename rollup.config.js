@@ -1,7 +1,10 @@
 export default [{
-  input: 'src/network-connect.js',
+  input: 'src/wallet-connect.js',
   output: [{
     dir: 'dist',
+    format: 'cjs'
+  }, {
+    file: 'dist/wallet-connect.browser.js',
     format: 'cjs'
   }]
 }]

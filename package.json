@@ -1,10 +1,10 @@
 {
-  "name": "@arteon/network-connect",
+  "name": "@arteon/wallet-connect",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/network-connect.js",
-  "browser": "dist/network-connect.browser.js",
-  "module": "src/network-connect.js",
+  "main": "dist/wallet-connect.js",
+  "browser": "dist/wallet-connect.browser.js",
+  "module": "src/wallet-connect.js",
   "scripts": {
     "compile": "rollup -c",
     "c": "npm run compile",
@@ -14,12 +14,13 @@
     "lint": "./node_modules/.bin/eslint src/**/**.js --fix",
     "coverage": "nyc --reporter=lcov npm run test",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "b": "browserify dist/network-connect.js -o dist/network-connect.browser.js --standalone networkConnect",
+    "b": "browserify dist/wallet-connect.js -o dist/wallet-connect.browser.js --standalone walletConnect",
     "build": "npm run lint && npm run c && npm run b && npm run coverage && npm run coveralls npm run doc",
     "test": "node test"
   },
   "keywords": [],
   "author": "Vandeurenglenn<vandeurenglenn@gmail.com>",
+  "repository": "https://github.com/Artontoken/wallet-connect",
   "license": "MIT",
   "devDependencies": {
     "browserify": "^17.0.0",

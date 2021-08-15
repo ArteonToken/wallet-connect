@@ -3,6 +3,12 @@ import { providers, Wallet, utils } from 'ethers'
 const { HDNode } = utils
 const { Web3Provider, JsonRpcProvider } = providers
 
+/**
+ * @param { String | undefined } rpcUrl - when undefined metaMask is returned
+ * @param { Object } network - { name, chainId}
+ *
+ * @return { Web3Provider }
+ */
 const providerFor = (rpcUrl, network) => {
   if (rpcUrl.includes('infura') || rpcUrl.includes('etherscan')) {
     return new JsonRpcProvider(rpcUrl, network)
@@ -11,6 +17,11 @@ const providerFor = (rpcUrl, network) => {
   return new Web3Provider(globalThis.ethereum)
 }
 
+/**
+ * @param { Object } network - { name, chainId}
+ *
+ * @return { Web3Provider, accounts }
+ */
 export const metaMask = async (network) => {
   await globalThis.ethereum.request({
     method: 'wallet_switchEthereumChain',
@@ -27,6 +38,12 @@ export const metaMask = async (network) => {
   }
 }
 
+/**
+ * @param { Object } network - { name, chainId}
+ * @param { Object } params - { rpcUrl, privateKey}
+ *
+ * @return { JsonRpcProvider, Wallet, accounts }
+ */
 export const privateKey = (network, params) => {
   const provider = providerFor(params.rpcUrl, network)
   const wallet = new Wallet(params.privateKey, provider)
@@ -37,6 +54,12 @@ export const privateKey = (network, params) => {
   }
 }
 
+/**
+ * @param { Object } network - { name, chainId}
+ * @param { Object } params - { rpcUrl, mnemonic}
+ *
+ * @return { JsonRpcProvider, HDNode, accounts }
+ */
 export const hdWallet = (network, params) => {
   const provider = providerFor(params.rpcUrl, network)
   const wallet = HDNode.fromMnemonic(params.mnemonic, provider)
@@ -49,7 +72,7 @@ export const hdWallet = (network, params) => {
 
 /**
  * @param {Object} params {rpcUrl, id, password, mnemonic, privateKey}
- * @param {Object | Number | String} network {name, chainId} | name | chainId
+ * @param {Object | Number | String | undefined} network {name, chainId} | name | chainId
  */
 export const connect = async (params = {}, network) => {
   if (!network) {

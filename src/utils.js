@@ -19,6 +19,10 @@ export const DEFAULT_NETWORK = {
   chainId: 1,
 }
 
+/**
+ * @param { String } url - rpcUrl
+ * @return {Object} network - { name, chainId }
+ */
 export const networkFromRpc = (url) => {
   const network = DEFAULT_NETWORK
   for (const name of Object.keys(networksByName)) {
