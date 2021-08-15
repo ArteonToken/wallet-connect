@@ -1,6 +1,6 @@
 {
   "name": "@arteon/wallet-connect",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "dist/wallet-connect.js",
   "browser": "dist/wallet-connect.browser.js",
