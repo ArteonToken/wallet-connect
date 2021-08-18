@@ -34,7 +34,7 @@ export const metaMask = async (network) => {
     await globalThis.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{
-        chainId: new BigNumber.from(network.chainId)._hex,
+        chainId: new BigNumber.from(network.chainId)._hex.replace('x0', 'x'),
       }],
     })
   } catch (e) {
@@ -43,7 +43,7 @@ export const metaMask = async (network) => {
         method: 'wallet_addEthereumChain',
         params: [{
           chainName: chainNameFor(network.chainId),
-          chainId: new BigNumber.from(network.chainId)._hex,
+          chainId: new BigNumber.from(network.chainId)._hex.replace('x0', 'x'),
           rpcUrls: [rpcUrlFor(network.chainId)],
           blockExplorerUrls: [blockExplorerFor(network.chainId)],
           iconUrls: [iconUrlFor(network.name)],
